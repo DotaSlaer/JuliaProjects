@@ -1,22 +1,24 @@
 function Obstacle(r=Robot(),i=0,mark=false)
     wall = true
     stepsSide = 0
+    size = 0
     while (isborder(r,HorizonSide(i))==true) && (isborder(r,HorizonSide((i+3)%4))==false)
         move!(r,HorizonSide((i+3)%4))
         stepsSide = stepsSide + 1
     end
     if isborder(r,HorizonSide(i))==false
-        Wall = false
+        wall = false
         move!(r,HorizonSide(i))
         while isborder(r,HorizonSide((i+1)%4))==true
             move!(r,HorizonSide(i))
+            size = size+1
         end
     end
     while stepsSide > 0
         move!(r,HorizonSide((i+1)%4))
         stepsSide = stepsSide - 1
     end
-    return wall
+    return wall, size
 end
 function MoveToBorder(r=Robot(),i=0,mark=false)
     wall = false
@@ -27,7 +29,7 @@ function MoveToBorder(r=Robot(),i=0,mark=false)
                 putmarker!(r)
             end
         end
-        wall = Obstacle(r,i,mark)
+        wall, void = Obstacle(r,i,mark)
         if mark == true
             putmarker!(r)
         end
